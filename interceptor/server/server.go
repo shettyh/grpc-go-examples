@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net"
 	"golang.org/x/net/context"
@@ -11,7 +10,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Staring server...")
+	log.Println("Staring server...")
 	srv := TestServiceImpl{}
 	lis, err := net.Listen("tcp", ":17002")
 
@@ -34,7 +33,7 @@ type TestServiceImpl struct {
 }
 
 func (*TestServiceImpl) SayHello(ctx context.Context, in *test.HelloRequest) (*test.HelloResponse, error) {
-	fmt.Println("Say Hello called")
+	log.Println("Say Hello called")
 	response := &test.HelloResponse{Message: "Hello"}
 	return response, nil
 }
@@ -44,11 +43,13 @@ type serverinterceptor struct {
 
 func (*serverinterceptor) intercept(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	log.Println("Inside interceptor")
-	log.Println("Method called %s", info.FullMethod)
+	log.Println("Method called", info.FullMethod)
 	if info == nil {
 		return nil, errors.New("passed nil *grpc.UnaryServerInfo")
 	}
 
+	log.Println("Calling the RPC")
 	resp, err := handler(ctx, req)
+	log.Println("Called rpc and response is ",resp)
 	return resp, err
 }
