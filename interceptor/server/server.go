@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net"
-
-	"gitlabe1.ext.net.nokia.com/shettyh/grpcexamplegointerceptor"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"github.com/shettyh/grpc-go-examples/interceptor"
 )
 
 func main() {

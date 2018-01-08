@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"gitlabe1.ext.net.nokia.com/shettyh/grpcexamplegointerceptor"
+	"github.com/shettyh/grpc-go-examples/interceptor"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
