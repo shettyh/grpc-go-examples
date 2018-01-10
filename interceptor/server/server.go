@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net"
-
-	"gitlabe1.ext.net.nokia.com/shettyh/grpcexamplegointerceptor"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"github.com/shettyh/grpc-go-examples/interceptor"
 )
 
 func main() {
@@ -23,7 +22,7 @@ func main() {
 	si := &serverinterceptor{}
 	s := grpc.NewServer(grpc.UnaryInterceptor(si.intercept))
 
-	test.RegisterTestServiceServer(s, &srv)
+	interceptor.RegisterTestServiceServer(s, &srv)
 
 	log.Println("Starting the server ...")
 	if err := s.Serve(lis); err != nil {
@@ -34,9 +33,9 @@ func main() {
 type TestServiceImpl struct {
 }
 
-func (*TestServiceImpl) SayHello(ctx context.Context, in *test.HelloRequest) (*test.HelloResponse, error) {
+func (*TestServiceImpl) SayHello(ctx context.Context, in *interceptor.HelloRequest) (*interceptor.HelloResponse, error) {
 	fmt.Println("Say Hello called")
-	response := &test.HelloResponse{Message: "Hello"}
+	response := &interceptor.HelloResponse{Message: "Hello"}
 	return response, nil
 }
 
