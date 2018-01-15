@@ -8,6 +8,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"github.com/shettyh/grpc-go-examples/interceptor"
+	"time"
 )
 
 func main() {
@@ -19,8 +20,7 @@ func main() {
 		log.Fatalf("Failed to bind to port %v", err)
 	}
 
-	si := &serverinterceptor{}
-	s := grpc.NewServer(grpc.UnaryInterceptor(si.intercept))
+	s := grpc.NewServer(grpc.UnaryInterceptor(serverInterceptor))
 
 	interceptor.RegisterTestServiceServer(s, &srv)
 
@@ -39,10 +39,7 @@ func (*TestServiceImpl) SayHello(ctx context.Context, in *interceptor.HelloReque
 	return response, nil
 }
 
-type serverinterceptor struct {
-}
-
-func (*serverinterceptor) intercept(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	log.Println("Inside interceptor")
 	log.Println("Method called %s", info.FullMethod)
 	if info == nil {
