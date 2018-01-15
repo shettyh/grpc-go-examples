@@ -18,7 +18,9 @@ func main() {
 		log.Fatalf("Failed to connect to server")
 	}
 	request := interceptor.HelloRequest{Message: "Hi"}
-	resp, err := client.SayHello(context.Background(), &request)
+	//Setting the client timeout
+	ctx,_ := context.WithTimeout(context.Background(),time.Second*10)
+	resp, err := client.SayHello(ctx, &request)
 	log.Println("Got response ", resp.Message)
 	conn.Close()
 
