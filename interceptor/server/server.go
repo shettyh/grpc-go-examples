@@ -19,7 +19,7 @@ func main() {
 		log.Fatalf("Failed to bind to port %v", err)
 	}
 
-	s := grpc.NewServer(grpc.UnaryInterceptor(serverInterceptor))
+	s := grpc.NewServer(ServerInterceptor())
 
 	interceptor.RegisterTestServiceServer(s, &srv)
 
@@ -35,6 +35,11 @@ func (*TestServiceImpl) SayHello(ctx context.Context, in *interceptor.HelloReque
 	log.Println("RPC called SayHello")
 	response := &interceptor.HelloResponse{Message: "Hello"}
 	return response, nil
+}
+
+// ServerInterceptor will return the serverInterceptor as ServerOption
+func ServerInterceptor() grpc.ServerOption {
+	return grpc.UnaryInterceptor(serverInterceptor)
 }
 
 // serverInterceptor will intercept the all the grpc unary calls
