@@ -8,7 +8,6 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"github.com/shettyh/grpc-go-examples/interceptor"
-	"time"
 )
 
 func main() {
@@ -30,22 +29,20 @@ func main() {
 	}
 }
 
-type TestServiceImpl struct {
-}
+type TestServiceImpl struct {}
 
 func (*TestServiceImpl) SayHello(ctx context.Context, in *interceptor.HelloRequest) (*interceptor.HelloResponse, error) {
-	fmt.Println("Say Hello called")
+	log.Println("RPC called SayHello")
 	response := &interceptor.HelloResponse{Message: "Hello"}
 	return response, nil
 }
 
+// serverInterceptor will intercept the all the grpc unary calls
 func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	log.Println("Inside interceptor")
-	log.Println("Method called %s", info.FullMethod)
+	log.Println("Intercepting the call ", info.FullMethod)
 	if info == nil {
 		return nil, errors.New("passed nil *grpc.UnaryServerInfo")
 	}
-
 	resp, err := handler(ctx, req)
 	return resp, err
 }
