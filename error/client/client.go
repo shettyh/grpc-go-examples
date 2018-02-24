@@ -15,11 +15,13 @@ func main(){
 		log.Fatal(err)
 	}
 
+
+	var trailer metadata.MD
 	client := errorservice.NewErrorServiceClient(conn)
-	ctx := metadata.NewOutgoingContext(context.Background(),metadata.Pairs("",""))
-	_,err = client.TestError(ctx,&errorservice.Request{})
-	md,_ := metadata.FromIncomingContext(ctx)
-	errMsg := errorservice.UnmarshalError(err,md)
+	ctx := context.Background()
+	_,err = client.TestError(ctx,&errorservice.Request{},grpc.Trailer(&trailer))
+
+	errMsg := errorservice.UnmarshalError(err,trailer)
 
 	log.Println(errMsg.Message)
 }

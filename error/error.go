@@ -18,7 +18,7 @@ func (e *Error) Error() string {
 func Errorf(code codes.Code, userErrCode int64, temporary bool, msg string, args ...interface{}) error {
 	return &Error{
 		Code:          int64(code),
-		Message:       fmt.Sprintf(msg, args),
+		Message:       fmt.Sprintf(msg, args...),
 		UserErrorCode: userErrCode,
 		Temporary:     temporary,
 	}
@@ -41,7 +41,7 @@ func MarshalError(err error, ctx context.Context) error {
 }
 
 func UnmarshalError(err error, md metadata.MD) *Error {
-	vals, ok := md["rpc_error"]
+	vals, ok := md["rpc-error"]
 	if ! ok {
 		return nil
 	}

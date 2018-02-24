@@ -13,7 +13,7 @@ import (
 func main() {
 	srvc := Service{}
 
-	srv := grpc.NewServer()
+	srv := grpc.NewServer(ServerInterceptor())
 	errorservice.RegisterErrorServiceServer(srv, srvc)
 
 	lis, err := net.Listen("tcp", ":10001")
@@ -29,9 +29,10 @@ type Service struct{}
 
 func (Service) TestError(ctx context.Context, request *errorservice.Request) (*errorservice.Response, error) {
 	//Add actual logic here
-
+	log.Printf("RPC: request recieved")
 	// On Error
-	err := errorservice.Errorf(codes.Internal, 500, false, "RPC failed")
+	actualError := errors.New("invalid request")
+	err := errorservice.Errorf(codes.Internal, 500, false, "RPC failed",actualError)
 	return nil, err
 }
 
