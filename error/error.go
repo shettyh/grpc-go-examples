@@ -1,20 +1,24 @@
 package errorservice
 
 import (
-	"google.golang.org/grpc/codes"
-	"fmt"
-	"golang.org/x/net/context"
-	"github.com/golang/protobuf/proto"
-	"google.golang.org/grpc/metadata"
 	"encoding/base64"
+	"fmt"
+	"github.com/golang/protobuf/proto"
+	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
+// Error utils
+
+// Error impl
 func (e *Error) Error() string {
 	return e.Message
 }
 
+// Errorf will return the Formatted error object
 func Errorf(code codes.Code, userErrCode int64, temporary bool, msg string, args ...interface{}) error {
 	return &Error{
 		Code:          int64(code),
@@ -24,6 +28,7 @@ func Errorf(code codes.Code, userErrCode int64, temporary bool, msg string, args
 	}
 }
 
+// MarshalError will marshall the error and add to the context
 func MarshalError(err error, ctx context.Context) error {
 	rErr, ok := err.(*Error)
 	if !ok {
@@ -40,9 +45,10 @@ func MarshalError(err error, ctx context.Context) error {
 	return status.Errorf(codes.Code(rErr.Code), rErr.Message)
 }
 
+// UnmarshalError will return the error object from metadata
 func UnmarshalError(err error, md metadata.MD) *Error {
 	vals, ok := md["rpc-error"]
-	if ! ok {
+	if !ok {
 		return nil
 	}
 

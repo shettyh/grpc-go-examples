@@ -1,13 +1,13 @@
 package main
 
 import (
-	"log"
-	"net"
+	"github.com/pkg/errors"
+	"github.com/shettyh/grpc-go-examples/helloworld"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"github.com/shettyh/grpc-go-examples/helloworld"
 	"google.golang.org/grpc/metadata"
-	"github.com/pkg/errors"
+	"log"
+	"net"
 )
 
 func main() {
@@ -31,14 +31,14 @@ type TestServiceImpl struct {
 func (*TestServiceImpl) SayHello(ctx context.Context, in *helloworld.HelloRequest) (*helloworld.HelloResponse, error) {
 	log.Println("Say Hello called")
 	//Get metadata from context
-	metaInfo,ok := metadata.FromContext(ctx)
+	metaInfo, ok := metadata.FromContext(ctx)
 
 	if !ok {
 		return nil, errors.New("not able to read the metadata information")
 	}
 
 	value := metaInfo["key1"]
-	log.Println("Got the meta value ",value)
+	log.Println("Got the meta value ", value)
 
 	response := &helloworld.HelloResponse{Message: "Hello"}
 	return response, nil

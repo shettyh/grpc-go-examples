@@ -19,7 +19,7 @@ func main() {
 	}
 	request := interceptor.HelloRequest{Message: "Hi"}
 	//Setting the client timeout
-	ctx,_ := context.WithTimeout(context.Background(),time.Second*10)
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*10)
 	resp, err := client.SayHello(ctx, &request)
 	log.Println("Got response ", resp.Message)
 	conn.Close()

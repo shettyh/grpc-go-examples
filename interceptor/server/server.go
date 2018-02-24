@@ -3,11 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
-	"net"
+	"github.com/shettyh/grpc-go-examples/interceptor"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"github.com/shettyh/grpc-go-examples/interceptor"
+	"log"
+	"net"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 	}
 }
 
-type TestServiceImpl struct {}
+type TestServiceImpl struct{}
 
 func (*TestServiceImpl) SayHello(ctx context.Context, in *interceptor.HelloRequest) (*interceptor.HelloResponse, error) {
 	log.Println("RPC called SayHello")

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"log"
+	"github.com/shettyh/grpc-go-examples/helloworld"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"github.com/shettyh/grpc-go-examples/helloworld"
+	"log"
 )
 
 func main() {

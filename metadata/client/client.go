@@ -1,12 +1,12 @@
 package main
 
 import (
-	"log"
+	"github.com/shettyh/grpc-go-examples/helloworld"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"time"
-	"github.com/shettyh/grpc-go-examples/helloworld"
 	"google.golang.org/grpc/metadata"
+	"log"
+	"time"
 )
 
 func main() {
@@ -20,14 +20,14 @@ func main() {
 	}
 	request := helloworld.HelloRequest{Message: "Hi"}
 	//Setting the client timeout
-	ctx,_ := context.WithTimeout(context.Background(),time.Second*10)
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*10)
 
 	//Adding metadata to the client call
 	//Create key-value pairs and create metadata ctx from it
 	metaMap := make(map[string]string)
 	metaMap["key1"] = "value1"
 	metaInfo := metadata.New(metaMap)
-	metaCtx := metadata.NewContext(ctx,metaInfo)
+	metaCtx := metadata.NewContext(ctx, metaInfo)
 
 	resp, err := client.SayHello(metaCtx, &request)
 	log.Println("Got response ", resp.Message)

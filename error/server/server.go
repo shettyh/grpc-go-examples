@@ -1,13 +1,13 @@
 package main
 
 import (
-	"golang.org/x/net/context"
-	"github.com/shettyh/grpc-go-examples/error"
-	"google.golang.org/grpc/codes"
 	"errors"
+	"github.com/shettyh/grpc-go-examples/error"
+	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"net"
+	"google.golang.org/grpc/codes"
 	"log"
+	"net"
 )
 
 func main() {
@@ -29,10 +29,10 @@ type Service struct{}
 
 func (Service) TestError(ctx context.Context, request *errorservice.Request) (*errorservice.Response, error) {
 	//Add actual logic here
-	log.Printf("RPC: request recieved")
+
 	// On Error
 	actualError := errors.New("invalid request")
-	err := errorservice.Errorf(codes.Internal, 500, false, "RPC failed",actualError)
+	err := errorservice.Errorf(codes.Internal, 500, false, "RPC failed", actualError)
 	return nil, err
 }
 
@@ -41,7 +41,7 @@ func ServerInterceptor() grpc.ServerOption {
 	return grpc.UnaryInterceptor(serverInterceptor)
 }
 
-// serverInterceptor will intercept the all the grpc unary calls
+// serverInterceptor will intercept the all the grpc unary calls and add the error to grpc trailer
 func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	if info == nil {
 		return nil, errors.New("passed nil *grpc.UnaryServerInfo")
