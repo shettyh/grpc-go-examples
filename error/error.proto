@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package error;
+package errorservice;
 
 service ErrorService {
     rpc TestError (Request) returns (Response);
