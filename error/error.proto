@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package error;
+
+service ErrorService {
+    rpc TestError (Request) returns (Response);
+}
+
+// Dummy request responses
+message Request {
+
+}
+
+message Response {
+
+}
+
+// General error message that sent as grpc Metadata info
+message Error {
+    int64 code = 1;
+    string message = 2;
+    bool temporary = 3;
+    int64 user_error_code = 4;
+}
